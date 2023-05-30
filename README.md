@@ -2,7 +2,7 @@
 Store and serve language model prompts
 
 ## What is it
-`prompt-serve` is designed to help you manage all of large language model (LLM) prompts and associated settings or metadata in a straightforward, version controlled manner.
+`prompt-serve` is designed to help you manage all of your large language model (LLM) prompts and associated settings or metadata in a straightforward, version controlled manner.
 
 **Highlights:**
 * YAML schema for prompts and metadata
