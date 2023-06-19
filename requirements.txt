@@ -1,0 +1,6 @@
+flask
+flask-restful
+pykwalify
+GitPython
+pyyaml
+
