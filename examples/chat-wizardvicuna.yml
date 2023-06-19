@@ -1,0 +1,23 @@
+title: WizardVicuna Chat
+uuid: 44825dad-47da-4af4-bac2-16feaac1a4c5
+description: Standard prompt template for a chat with WizardVicuna
+category: chat
+provider: local
+model: WizardVicuna
+model_settings:
+  temperature: 0.8
+  top_k: 40
+  top_p: 0.9
+prompt: |
+  A chat between a human and an assistant.
+  
+  ### Human: 
+  Write a Python script for text classification using Transformers and PyTorch
+  ### Assistant: 
+  <assistant>
+references:
+  - https://huggingface.co/TheBloke/wizard-vicuna-13B-GPTQ
+  - https://huggingface.co/junelee/wizard-vicuna-13b/discussions/1
+tags:
+  - local-llm
+  - wizardvicuna
