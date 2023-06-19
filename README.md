@@ -7,15 +7,13 @@
 This project provides a YAML schema for prompt indexing purposes and a small API server that handles interactions with a Git repository.
 
 ## Highlights ✨
-* YAML schema for prompts and metadata
-* Version controlled via Git
+* YAML schema for prompts and associated metadata
 * API server to upload or retrieve prompts
-* Easily retrieve prompts for use in your own code
-  * Retrieve as prompt text only, YAML with full metadata, or LangChain prompt template  
+* Version controlled via Git
 * Associate prompts to one another to represent chains
 * Create "packs" of multiple prompts or chains to represent categories of tasks or workflows
 * Store any kind of prompt text or template (LangChain, Guidance, etc.)
-* Store LLM provider, model, and settings for evaluation re-run purposes
+* Store LLM provider, model, and settings for evaluation purposes
 
 ## Schema 🗺️
 Uploaded prompts are validated against [schema.yml](schema.yml). 
