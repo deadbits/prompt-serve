@@ -1,0 +1,21 @@
+title: Conversation summary
+uuid: b50c30cf-e312-4554-8f04-61b015ef7b59
+description: Summarize a chat transcript between a user and AI assistant
+category: chat
+provider: local
+model: openai
+model_settings:
+  temperature: 0.8
+  top_k: 40
+  top_p: 0.9
+prompt: |
+  Summarize the following chat transcript by shortening the content without losing important context or information:
+  
+  {chat_transcript}
+references:
+  - https://github.com/deadbits/prompt-serve
+tags:
+  - local-llm
+  - openai
+  - chat
+  - summarization
