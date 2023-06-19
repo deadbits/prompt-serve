@@ -1,62 +1,61 @@
-type: map
-mapping:
+map:
   title:
     type: str
-    required: yes
+    required: true
   uuid:
     type: str
-    required: yes
+    required: true
   description:
     type: str
-    required: yes
+    required: true
   category:
     type: str
-    required: yes
+    required: true
   provider:
     type: str
-    required: yes
+    required: false
   model:
     type: str
-    required: yes
+    required: false
   model_settings:
     type: map
-    required: no
+    required: false
     mapping:
       temperature:
         type: float
-        required: no
+        required: false
       top_k:
         type: int
-        required: no
+        required: false
       top_p:
         type: float
-        required: no
+        required: false
       max_tokens:
         type: int
-        required: no
+        required: false
       stream:
         type: bool
-        required: no
+        required: false
   prompt:
     type: str
-    required: yes
+    required: true
   references:
     type: seq
-    required: no
+    required: false
     sequence:
     - type: str
   associations:
     type: seq
-    required: no
+    required: false
     sequence:
     - type: str
   packs:
     type: seq
-    required: no
+    required: false
     sequence:
     - type: str
   tags:
     type: seq
-    required: no
+    required: false
     sequence:
     - type: str
