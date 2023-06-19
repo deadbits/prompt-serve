@@ -1,0 +1,25 @@
+title: Question answering with references
+uuid: ea2544f9-5157-4715-bc6c-11a1bad5cc19
+description: Answer a question using a context document and cite the documents that contain the answer
+category: qa
+provider: openai
+model: gpt-3.5-turbo
+model_settings:
+  temperature: 0.8
+  top_k: 40
+  top_p: 0.9
+prompt: |
+  Given a question and a context document, answer the question and cite the documents that contain the answer.
+  * Cite the documents used with Document[number] notation. 
+  * Cite every document that contains the answer.
+  * If the documents do not contain the answer, say "I do not have enough information to answer".
+
+  Context: {documents}
+  Question: {question}
+references:
+  - https://github.com/deadbits/prompt-serve
+tags:
+  - openai
+  - question-answering
+
+

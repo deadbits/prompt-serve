@@ -1,0 +1,22 @@
+title: Conversational chat bot
+uuid: 772f7a50-9e90-4cb0-8153-600b78747bee
+description: Basic conversational chat bot template
+category: chat
+provider: openai
+model: gpt-3.5-turbo
+model_settings:
+  temperature: 0.8
+  top_k: 40
+  top_p: 0.9
+prompt: |
+  You are an AI chat bot having a conversation with a human user. You can use the chat history below for additional context in your convversation.
+  You are helpful, friendly, and polite.
+
+  Chat history: {history}
+
+  Human: {user query}
+references:
+  - https://github.com/deadbits/prompt-serve
+tags:
+  - openai
+  - question-answering

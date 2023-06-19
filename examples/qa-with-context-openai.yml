@@ -1,0 +1,19 @@
+title: Question answering with context
+uuid: 3fcd8397-8ddf-4673-9d30-23d59f26a57d
+description: Answer a question using a context document
+category: qa
+provider: openai
+model: gpt-3.5-turbo
+model_settings:
+  temperature: 0.8
+  top_k: 40
+  top_p: 0.9
+prompt: |
+  Answer the user question using the context provided below. If the answer is not contained within the context, say "I do not know."
+  Context: {documents}
+  Question: {question}
+references:
+  - https://github.com/deadbits/prompt-serve
+tags:
+  - openai
+  - question-answering

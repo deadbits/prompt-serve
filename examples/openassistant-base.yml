@@ -1,0 +1,20 @@
+title: OpenAssistant base prompt
+uuid: 22c0f2c3-758b-41a5-b853-013827cfd2a0
+description: OpenAssistant prompt format template
+category: base
+provider: local
+model: openassistant
+model_settings:
+  temperature: 0.8
+  top_k: 40
+  top_p: 0.9
+prompt: |
+  <|prompter|> prompt goes here
+  <|assistant|>: 
+references:
+  - https://github.com/deadbits/prompt-serve
+tags:
+  - local-llm
+  - openassistant
+  - base
+
