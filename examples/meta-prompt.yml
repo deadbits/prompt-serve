@@ -1,0 +1,29 @@
+title: Meta prompt
+uuid: b50c30cf-e312-4554-8f04-61b015ef7b59
+description: Use an LLM to reflect on and critique a prior LLM interaction
+category: instruct
+provider: openai
+model: gpt-3.5-turbo
+model_settings:
+  temperature: 0.8
+  top_k: 40
+  top_p: 0.9
+prompt: |
+  Assistant just had the below interactions with a User. Assistant followed the "system: Instructions" closely. Your job is to critique the Assistant's performance and then revise the Instructions so that Assistant would more quickly and correctly respond in the future.
+   
+  ####
+  {chat_history}
+  ####
+   
+  Please reflect on these interactions.
+  
+  You should first critique Assistant's performance. What could Assistant have done better? What should the Assistant remember about this user? Are there things this user always wants? Indicate this with "Critique: ...".
+  
+  You should next revise the Instructions so that Assistant would quickly and correctly respond in the future. Assistant's goal is to satisfy the user in as few interactions as possible. Assistant will only see the new Instructions, not the interaction history, so anything important must be summarized in the Instructions. Don't forget any important details in the current Instructions! 
+  Indicate the new Instructions by "Instructions: ...".
+references:
+  - https://prompthub.deepset.ai/
+tags:
+  - openai
+  - meta-prompt
+
