@@ -1,5 +1,5 @@
 title: Summarize text
-uuid: b50c30cf-e312-4554-8f04-61b015ef7b59
+uuid: 32a4558d-bb7c-4dc6-ba07-21540b15cf44
 description: Summarize a chunk of text with an overview and key takeaways
 category: instruct
 provider: openai

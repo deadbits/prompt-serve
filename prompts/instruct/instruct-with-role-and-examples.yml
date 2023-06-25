@@ -1,5 +1,5 @@
 title: Instruct with Role and examples
-uuid: b50c30cf-e312-4554-8f04-61b015ef7b59
+uuid: 2a2fd7cb-ba7d-4b3d-9613-ef22240aed3f
 description: Builds on the Instruct with Role prompt by providing examples of ideal responses
 category: instruct
 provider: openai

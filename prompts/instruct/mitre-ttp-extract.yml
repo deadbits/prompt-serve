@@ -1,5 +1,5 @@
 title: Extract MITRE TTPs
-uuid: b50c30cf-e312-4554-8f04-61b015ef7b59
+uuid: 49ce6be2-87fa-4bc7-a37f-de908909b4d5
 description: Extract MITRE ATTCK TTPs from provided context documents
 category: instruct
 provider: openai

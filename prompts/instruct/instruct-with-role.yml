@@ -1,5 +1,5 @@
 title: Instruct with Role
-uuid: b50c30cf-e312-4554-8f04-61b015ef7b59
+uuid: 961b7453-719f-46d9-809a-a3320aaa6b77
 description: Builds on a basic prompt by providing a Role for the model to follow and instructs for that role
 category: instruct
 provider: openai
