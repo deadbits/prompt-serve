@@ -36,6 +36,12 @@ map:
       stream:
         type: bool
         required: false
+      presence_penalty:
+        type: float
+        required: false
+      frequency_penalty:
+        type: float
+        required: false
   prompt:
     type: str
     required: true

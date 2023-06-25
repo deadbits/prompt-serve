@@ -19,7 +19,7 @@ This project provides a YAML schema for prompt indexing purposes and a small API
 * = _coming soon_
 
 ## Schema 🗺️
-UPrompts follow the schema provided in [schema.yml](schema.yml). 
+Prompts follow the schema provided in [schema.yml](schema.yml). 
 
 Check out the [prompts](prompts/) repository to see it in action. 
 
