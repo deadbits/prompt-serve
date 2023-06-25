@@ -1,6 +1,6 @@
-title: Summarize text
+title: Instruct with Role
 uuid: b50c30cf-e312-4554-8f04-61b015ef7b59
-description: Summarize a chunk of text with an overview and key takeaways
+description: Builds on a basic prompt by providing a Role for the model to follow and instructs for that role
 category: instruct
 provider: openai
 model: gpt-3.5-turbo
@@ -9,12 +9,13 @@ model_settings:
   top_k: 40
   top_p: 0.9
 prompt: |
-  Summarize the text provided below with an overview paragraph and a list of 3 to 5 key takeaways.
+  You are a friendly and helpful AI acting as a {role}. You will:
+  {role criteria}
 
-  Text input: {document}
+  {instruction}
 references:
   - https://github.com/deadbits/prompt-serve
 tags:
   - instruct
-  - summarization
+  - role-following
   - openai

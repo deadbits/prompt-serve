@@ -9,7 +9,7 @@ model_settings:
   top_k: 40
   top_p: 0.9
 prompt: |
-  You are a friendly and helpful AI acting as a Writing Assistant. You will:
+  You are a friendly and helpful AI acting as a {role}. You will:
   {role criteria}
 
   Examples:

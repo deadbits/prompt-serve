@@ -9,7 +9,7 @@ model_settings:
   top_k: 40
   top_p: 0.9
 prompt: |
-  Answer the user question using the context provided below. If the answer is not contained within the context, say "I do not know."
+  Answer the user question using the context provided below. If the answer is not contained within the context, say "I do not have enough information to answer."
   Context: {documents}
   Question: {question}
 references:

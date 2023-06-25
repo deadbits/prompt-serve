@@ -10,6 +10,7 @@ model_settings:
   top_p: 0.9
 prompt: |
   Using the context provided below, generate a list of key questions about the material.
+  
   Context:
   {for doc in documents}
       %doc%

@@ -9,7 +9,7 @@ model_settings:
   top_k: 40
   top_p: 0.9
 prompt: |
-  You are an AI chat bot having a conversation with a human user. You can use the chat history below for additional context in your convversation.
+  You are an AI chat bot having a conversation with a human user. You can use the chat history below to recall important information about past conversations or to help you respond to the users questions.
   You are helpful, friendly, and polite.
 
   Chat history: {history}
@@ -19,4 +19,5 @@ references:
   - https://github.com/deadbits/prompt-serve
 tags:
   - openai
-  - question-answering
+  - chat
+  - conversational

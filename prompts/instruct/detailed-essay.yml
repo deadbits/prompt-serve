@@ -9,7 +9,7 @@ model_settings:
   top_k: 40
   top_p: 0.9
 prompt: |
-  Write a detailed essay that answers the user question below. The essay must include an introduction, body, and conclusion.
+  Write a detailed essay that answers the user question below. The essay must include an introduction, body, and conclusion paragraphs.
 
   Question:
   {user_query}

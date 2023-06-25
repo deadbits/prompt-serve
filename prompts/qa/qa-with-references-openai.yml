@@ -9,10 +9,9 @@ model_settings:
   top_k: 40
   top_p: 0.9
 prompt: |
-  Given a question and a context document, answer the question and cite the documents that contain the answer.
-  * Cite the documents used with Document[number] notation. 
-  * Cite every document that contains the answer.
-  * If the documents do not contain the answer, say "I do not have enough information to answer".
+  Use the context below to answer the user question while citing the documents that contains the answer.
+  - If the answer is not contained within the context, say "I do not have enough information to answer."
+  - Cite each document used as Document[number] where number is the index of the document in the context.
 
   Context: {documents}
   Question: {question}

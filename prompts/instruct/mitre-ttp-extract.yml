@@ -9,10 +9,11 @@ model_settings:
   top_k: 40
   top_p: 0.9
 prompt: |
-  Extract all MITRE ATT&CK Tactics, Techniques, and Procedures from the text below. Each extracted TTP must be presented as:
+  Extract all MITRE ATT&CK Tactics, Techniques, and Procedures from the text provided below. 
+  Each extracted TTP must be presented as:
   <Tactic Name> - <Tactic ID> - <Technique ID> - <Technique Name>
 
-  Examples:
+  Example:
   Reconnaissance - TA0043 - T1595 - Active Scanning
 references:
   - https://github.com/deadbits/prompt-serve

@@ -9,7 +9,7 @@ model_settings:
   top_k: 40
   top_p: 0.9
 prompt: |
-  Summarize the following chat transcript by shortening the content without losing important context or information:
+  Provide a summary of the following chat transcript between a user and AI assistant without losing key information or context:
   
   {chat_transcript}
 references:
@@ -19,3 +19,4 @@ tags:
   - openai
   - chat
   - summarization
+  - conversational
