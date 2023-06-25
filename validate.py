@@ -1,5 +1,6 @@
 import os
 import sys
+import uuid
 import argparse
 
 import yaml
@@ -27,7 +28,7 @@ def validate_file(file_path):
     c.validate()
 
 
-def validate_directory(directory_path):
+def validate_directory(directory_path, create=False):
     # walk the directory and validate each file
     for root, dirs, files in os.walk(directory_path):
 
@@ -41,7 +42,12 @@ def validate_directory(directory_path):
                     validate_file(file_path)
                     print(f'[+] {file_path} is valid.')
                 except Exception as e:
-                    print(f'[x] validation failed for {file_path}: {str(e)}')
+                    print(f'[x] validation failed for {file_path}\n{str(e)}')
+                    if create:
+                        new_uuid = str(uuid.uuid4())
+                        print(f'[+] new uuid: {new_uuid}')
+                
+                print('\n')
 
 
 if __name__ == '__main__':
@@ -66,6 +72,13 @@ if __name__ == '__main__':
         required=False
     )
 
+    parser.add_argument(
+        '-c', '--create',
+        help='create new uuids if validation fails',
+        required=False,
+        action='store_true'
+    )
+
     args = parser.parse_args()
 
     if not os.path.exists(args.schema):
@@ -73,11 +86,12 @@ if __name__ == '__main__':
         sys.exit(1)
 
     SCHEMA_PATH = args.schema
+    CREATE = args.create
 
     if args.file:
-        validate_file(args.file)
+        validate_file(args.file, CREATE)
     elif args.directory:
-        validate_directory(args.directory)
+        validate_directory(args.directory, CREATE)
     else:
         parser.print_help()
         sys.exit(1)
