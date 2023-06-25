@@ -1,0 +1,21 @@
+title: Instruct with Role
+uuid: b50c30cf-e312-4554-8f04-61b015ef7b59
+description: Builds on a basic prompt by providing a Role for the model to follow and instructs for that role
+category: instruct
+provider: openai
+model: gpt-3.5-turbo
+model_settings:
+  temperature: 0.8
+  top_k: 40
+  top_p: 0.9
+prompt: |
+  You are a friendly and helpful AI acting as a Writing Assistant. You will:
+  {role criteria}
+
+  {instruction}
+references:
+  - https://github.com/deadbits/prompt-serve
+tags:
+  - instruct
+  - role-following
+  - openai

@@ -1,0 +1,22 @@
+title: Detailed essay
+uuid: b50c30cf-e312-4554-8f04-61b015ef7b59
+description: Write a detailed answer that answers a question
+category: instruct
+provider: openai
+model: gpt-3.5-turbo
+model_settings:
+  temperature: 0.8
+  top_k: 40
+  top_p: 0.9
+prompt: |
+  Write a detailed essay that answers the user question below. The essay must include an introduction, body, and conclusion.
+
+  Question:
+  {user_query}
+references:
+  - https://github.com/deadbits/prompt-serve
+tags:
+  - question-answering
+  - openai
+  - writing
+  

@@ -1,0 +1,20 @@
+title: Question generation
+uuid: b50c30cf-e312-4554-8f04-61b015ef7b59
+description: Generate a list of questions about provided text
+category: instruct
+provider: openai
+model: gpt-3.5-model
+model_settings:
+  temperature: 0.8
+  top_k: 40
+  top_p: 0.9
+prompt: |
+  Using the context provided below, generate a list of key questions about the material.
+  Context:
+  {for doc in documents}
+      %doc%
+references:
+  - https://github.com/deadbits/prompt-serve
+tags:
+  - question-generation
+  - openai

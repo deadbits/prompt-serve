@@ -9,7 +9,7 @@ model_settings:
   top_k: 40
   top_p: 0.9
 prompt: |
-  <|prompter|> prompt goes here
+  <|prompter|> {user prompt}
   <|assistant|>: 
 references:
   - https://github.com/deadbits/prompt-serve
