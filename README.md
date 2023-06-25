@@ -16,7 +16,7 @@ This project provides a YAML schema for prompt indexing purposes and a small API
 * API server to upload or retrieve prompts*
 * Version controlled via Git*
 
-* = _coming soon_
+`* = _coming soon_`
 
 ## Schema 🗺️
 Prompts follow the schema provided in [schema.yml](schema.yml). 
