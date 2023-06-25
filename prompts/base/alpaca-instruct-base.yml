@@ -1,7 +1,7 @@
 title: Alpaca instruct base
 uuid: 548ffd0a-1505-49c1-9248-cabf1af4d912
 description: Basic Alpaca instruct template
-category: instruct
+category: base
 provider: local
 model: alpaca
 model_settings:

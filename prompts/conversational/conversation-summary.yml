@@ -1,7 +1,7 @@
 title: Conversation summary
 uuid: b50c30cf-e312-4554-8f04-61b015ef7b59
 description: Summarize a chat transcript between a user and AI assistant
-category: chat
+category: conversational
 provider: local
 model: openai
 model_settings:
