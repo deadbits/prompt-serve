@@ -89,7 +89,7 @@ if __name__ == '__main__':
     CREATE = args.create
 
     if args.file:
-        validate_file(args.file, CREATE)
+        validate_file(args.file)
     elif args.directory:
         validate_directory(args.directory, CREATE)
     else:
