@@ -1,0 +1,18 @@
+title: APT Summary Report
+uuid: 6ebbf761-9139-48fa-b004-ab11e164dfdd
+description: Summarize an APT threat actor
+category: security
+provider: openai
+model: gpt-3.5-turbo
+model_settings:
+  temperature: 0.8
+  top_p: 0.9
+prompt: | 
+  Provide a summary of the threat actor {NAME} including targeting, motivation,
+  and common tactics, techniques, and procedures.
+references:
+  - https://github.com/deadbits/prompt-serve
+tags:
+  - threat-intel
+  - openai
+
