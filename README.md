@@ -6,6 +6,8 @@
 
 This project provides a YAML schema for prompt indexing purposes and a small API server that handles interactions with a Git repository.
 
+* [Release blog post](https://deadbits.substack.com/p/the-prompt-serve-schema)
+
 ## Highlights ✨
 * YAML schema for prompts and associated metadata
 
