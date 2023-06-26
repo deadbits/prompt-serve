@@ -1,0 +1,39 @@
+title: Guidance example
+uuid: 654edd6d-8406-4a77-9859-904230477c3f
+description: Example of using prompt-serve schema for a Microsoft Guidance prompt
+category: guidance
+provider: openai
+model: gpt-3.5-turbo
+model_settings:
+  temperature: 0
+  max_tokens: 500
+  top_k: 40
+  top_p: 0.9
+prompt: |
+  {{#system~}}
+  You are a helpful and terse assistant.
+  {{~/system}}
+
+  {{#user~}}
+  I want a response to the following question:
+  {{query}}
+  Name 3 world-class experts (past or present) who would be great at answering this?
+  Don't answer the question yet.
+  {{~/user}}
+
+  {{#assistant~}}
+  {{gen 'expert_names' temperature=0 max_tokens=300}}
+  {{~/assistant}}
+
+  {{#user~}}
+  Great, now please answer the question as if these experts had collaborated in writing a joint anonymous answer.
+  {{~/user}}
+
+  {{#assistant~}}
+  {{gen 'answer' temperature=0 max_tokens=500}}
+  {{~/assistant}}
+references:
+  - https://github.com/microsoft/guidance
+tags:
+  - guidance
+  - openai
