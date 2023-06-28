@@ -71,6 +71,51 @@ options:
   -c, --create          create new uuids if validation fails
 ```
 
+## Statistics utility
+The command line utility [stats.py](stats.py) will scan a directory of prompt-serve files and display statistics on the category, provider, and model fields in tables. 
+
+
+**Example output** 
+```
+[ category ]
+      category  Count
+      instruct      6
+          base      3
+conversational      2
+       injects      2
+            qa      2
+      guidance      1
+         react      1
+           cot      1
+      security      1
+
+
+[ provider ]
+provider  Count
+  openai     15
+   local      4
+
+
+[ model ]
+        model  Count
+gpt-3.5-turbo     14
+       openai      1
+openassistant      1
+ WizardVicuna      1
+       alpaca      1
+
+
+[ tags ]
+(top 5)
+              tags  Count
+            openai     14
+         local-llm      4
+              base      3
+          instruct      3
+question-answering      3
+
+```
+
 ## Prompt creation helper
 The command line utility [create.py](create.py) can be used to interactively create a prompt with the prompt-serve schema. 
 
