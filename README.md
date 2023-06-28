@@ -10,11 +10,12 @@ This project provides a YAML schema for prompt indexing purposes and a small API
 
 ## Highlights ✨
 * YAML schema for prompts and associated metadata
-
 * Associate prompts to one another to represent chains
 * Create "packs" of multiple prompts or chains to represent categories of tasks or workflows
 * Store any kind of prompt text or template
 * Store LLM provider, model, and settings
+* Command-line utility for creating prompt files
+* Command-line utility for viewing prompt statistics
 * API server to upload or retrieve prompts*
 * Version controlled via Git*
 
@@ -68,4 +69,35 @@ options:
   -d DIRECTORY, --directory DIRECTORY
                         directory to validate
   -c, --create          create new uuids if validation fails
+```
+
+## Prompt creation helper
+The command line utility [create.py](create.py) can be used to interactively create a prompt with the prompt-serve schema. 
+
+🪲 This is just a proof of concept and has a few known bugs:
+* multi-line input for "prompt" field not handled correctly
+* no defaults are set for optional fields
+   * we should not include the optional field if there's no input instead 
+
+```
+$ python create.py -n summary.yml                   [20:27:04]
+creating prompt file summary.yml ...
+title (str): Summarize blog posts
+description (str): Summarize a blog post with key takeaways
+category (str): summarization
+provider (str) : openai
+model (str) : gpt-3.5-turbo
+temperature (float) : 0.8
+top_k (int) : 
+top_p (float) : 0.9
+max_tokens (int) : 512
+stream (bool) : false
+presence_penalty (float) : 
+frequency_penalty (float) : 
+prompt (str): Summarize the blog post provided below with 3-5 key takeaways as bullet points: {blog_content}
+references (seq) : https://github.com/deadbits/prompt-serve
+associations (seq) : 
+packs (seq) : 
+tags (seq) : 
+ successfully wrote file summary.yml
 ```
