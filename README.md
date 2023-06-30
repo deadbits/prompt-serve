@@ -27,7 +27,7 @@ Prompts follow the schema provided in [schema.yml](schema.yml).
 
 Check out the [prompts](prompts/) repository to see it in action. 
 
-```
+```yaml
 title: prompt-title-or-name
 uuid: prompt-uuid
 description: prompt-description
@@ -95,12 +95,12 @@ Stats can also be optionally collected when running [validate.py](validate.py).
 ## Use in LangChain ⛓️
 prompt-serve files can be easily converted to LangChain Prompt Templates.
 
-```
+```python
 import yaml
 from langhain import PromptTemplate
 
 def ps_to_langchain():
-    with open('prompt-serve.yml', 'r') as file:
+    with open('your-prompt-serve-file.yml', 'r') as file:
         try:
             data = yaml.safe_load(file)
             prompt = data.get('prompt')
@@ -119,7 +119,7 @@ The command line utility [create.py](create.py) can be used to interactively cre
 * no defaults are set for optional fields
 
 ```
-$ python create.py -n summary.yml                   [20:27:04]
+$ python create.py -n summary.yml
 creating prompt file summary.yml ...
 title (str): Summarize blog posts
 description (str): Summarize a blog post with key takeaways
