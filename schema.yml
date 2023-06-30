@@ -45,6 +45,11 @@ map:
   prompt:
     type: str
     required: true
+  input_variables:
+    type: seq
+    required: false
+    sequence:
+    - type: str
   references:
     type: seq
     required: false
