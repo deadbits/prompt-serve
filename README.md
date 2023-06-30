@@ -79,13 +79,15 @@ options:
 ```
 
 You can also gather statistics on the types of prompts in your collection by passing `--gen-stats`. The screenshot below is an example of this output.
+
 ![Validation with stats](/assets/validate-with-stats.png)
 
 ## Statistics utility
 The command line utility [stats.py](stats.py) will scan a directory of prompt-serve files and display statistics on the category, provider, and model fields in tables. 
 Stats can also be optionally collected when running [validate.py](validate.py).
 
-**Example output** 
+**Example output**
+ 
 ![Stats](/assets/stats-cli.png)
 
 ## Use in LangChain
