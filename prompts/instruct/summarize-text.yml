@@ -12,6 +12,8 @@ prompt: |
   Summarize the text provided below with an overview paragraph and a bullet point list of 3 to 5 key takeaways.
 
   Text input: {document}
+input_variables:
+  - document
 references:
   - https://github.com/deadbits/prompt-serve
 tags:

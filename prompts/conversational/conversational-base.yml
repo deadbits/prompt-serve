@@ -14,7 +14,10 @@ prompt: |
 
   Chat history: {history}
 
-  Human: {user query}
+  Human: {user_query}
+input_variables:
+  - history
+  - user_query
 references:
   - https://github.com/deadbits/prompt-serve
 tags:

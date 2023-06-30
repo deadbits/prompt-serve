@@ -12,7 +12,7 @@ prompt: |
   A chat between a human and an assistant.
   
   ### Human: 
-  Write a Python script for text classification using Transformers and PyTorch
+  Write a haiku about the moons of Jupiter
   ### Assistant: 
   <assistant>
 references:

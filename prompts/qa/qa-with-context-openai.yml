@@ -12,6 +12,9 @@ prompt: |
   Answer the user question using the context provided below. If the answer is not contained within the context, say "I do not have enough information to answer."
   Context: {documents}
   Question: {question}
+input_variables:
+  - documents
+  - question
 references:
   - https://github.com/deadbits/prompt-serve
 tags:

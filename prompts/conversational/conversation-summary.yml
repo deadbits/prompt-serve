@@ -12,6 +12,8 @@ prompt: |
   Provide a summary of the following chat transcript between a user and AI assistant without losing key information or context:
   
   {chat_transcript}
+input_variables:
+  - chat_transcript
 references:
   - https://github.com/deadbits/prompt-serve
 tags:

@@ -15,6 +15,11 @@ prompt: |
 
   Example:
   Reconnaissance - TA0043 - T1595 - Active Scanning
+
+  Context:
+  {documents}
+input_variables:
+  - documents
 references:
   - https://github.com/deadbits/prompt-serve
 tags:

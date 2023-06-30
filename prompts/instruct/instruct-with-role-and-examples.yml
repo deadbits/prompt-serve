@@ -10,13 +10,17 @@ model_settings:
   top_p: 0.9
 prompt: |
   You are a friendly and helpful AI acting as a {role}. You will:
-  {role criteria}
+  {role_criteria}
 
   Examples:
-  {for example in examples}
-     %example%
+  {examples}
   
   User: {instruction}
+input_variables:
+  - role
+  - role_criteria
+  - examples
+  - instruction
 references:
   - https://github.com/deadbits/prompt-serve
 tags:

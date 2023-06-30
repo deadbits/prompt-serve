@@ -15,6 +15,9 @@ prompt: |
 
   Context: {documents}
   Question: {question}
+input_variables:
+  - documents
+  - question
 references:
   - https://github.com/deadbits/prompt-serve
 tags:

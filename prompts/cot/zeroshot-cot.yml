@@ -9,8 +9,9 @@ model_settings:
   top_k: 40
   top_p: 0.9
 prompt: |
-  Q: {user_query}
-  A: Let's think step by step.
+  {user_query} Let's think step by step.
+input_variables:
+  - user_query
 references:
   - https://arxiv.org/abs/2205.11916
 tags:

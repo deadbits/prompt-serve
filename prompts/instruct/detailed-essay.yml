@@ -13,6 +13,8 @@ prompt: |
 
   Question:
   {user_query}
+input_variables:
+  - user_query
 references:
   - https://github.com/deadbits/prompt-serve
 tags:

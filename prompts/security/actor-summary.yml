@@ -8,8 +8,10 @@ model_settings:
   temperature: 0.8
   top_p: 0.9
 prompt: | 
-  Provide a summary of the threat actor {NAME} including targeting, motivation,
+  Provide a summary of the threat actor {actor_name} including targeting, motivation,
   and common tactics, techniques, and procedures.
+input_variables:
+  - actor_name
 references:
   - https://github.com/deadbits/prompt-serve
 tags:
