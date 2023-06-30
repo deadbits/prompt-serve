@@ -56,7 +56,7 @@ tags:
   - tag
 ```
 
-## Validation
+## Validation ✅
 You can use the [validate.py](validate.py) utility to verify prompts meet the schema and have unique UUIDs. 
 
 By specifying the `--create` argument, a new UUID will be provided if a given prompt doesn't have a unique ID for your scanned set.
@@ -78,19 +78,21 @@ options:
 
 ```
 
-You can also gather statistics on the types of prompts in your collection by passing `--gen-stats`. The screenshot below is an example of this output.
+You can also gather statistics on the types of prompts in your collection by passing `--gen-stats`.
+
+**Example output**
 
 ![Validation with stats](/assets/validate-with-stats.png)
 
-## Statistics utility
+## Statistics utility 📊
 The command line utility [stats.py](stats.py) will scan a directory of prompt-serve files and display statistics on the category, provider, and model fields in tables. 
 Stats can also be optionally collected when running [validate.py](validate.py).
 
 **Example output**
- 
+
 ![Stats](/assets/stats-cli.png)
 
-## Use in LangChain
+## Use in LangChain ⛓️
 prompt-serve files can be easily converted to LangChain Prompt Templates.
 
 ```
@@ -109,7 +111,7 @@ def ps_to_langchain():
             pass
 ```
 
-## Prompt creation helper
+## Prompt creation helper ✍️
 The command line utility [create.py](create.py) can be used to interactively create a prompt with the prompt-serve schema. 
 
 🪲 This is just a proof of concept and has a few known bugs:
