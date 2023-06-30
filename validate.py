@@ -2,33 +2,67 @@ import os
 import sys
 import uuid
 import argparse
-
 import yaml
+import pandas as pd
+
+from rich import print as rprint
+from collections import defaultdict
 from pykwalify.core import Core
 
 
 # store uuids in a set to check for uniqueness
 seen_uuids = set()
+statistics = defaultdict(lambda: defaultdict(int))
 
 
-def validate_file(file_path):
+def collect_stats_from_file(file_path):
+    with open(file_path, 'r') as file:
+        try:
+            data = yaml.safe_load(file)
+
+            if 'category' in data:
+                statistics['category'][data['category']] += 1
+            if 'provider' in data:
+                statistics['provider'][data['provider']] += 1
+            if 'model' in data:
+                statistics['model'][data['model']] += 1
+
+            for tag in data.get('tags', []):
+                statistics['tags'][tag] += 1
+
+        except yaml.YAMLError as err:
+            rprint(f'[bold red][x][/bold red] error getting stats from {file_path}: {err}')
+
+
+def validate_file(file_path, create=False):
     # load the yaml file
     with open(file_path, 'r') as f:
         data = yaml.safe_load(f)
 
     # check for uniqueness of uuid
     uuid = data.get('uuid')
+
     if uuid in seen_uuids:
-        raise ValueError(f'[error] UUID {uuid} in file {file_path} is not unique.')
+        rprint(f'[red][x][/bold red] UUID {uuid} in file {file_path} is not unique.')
+
+        # create a new uuid if requested
+        if create:
+            new_uuid = str(uuid.uuid4())
+            rprint(f'[bold blue][+][/bold blue] new uuid: {new_uuid}')
+    
     seen_uuids.add(uuid)
 
     # validate against the schema
     c = Core(source_data=data, schema_files=[SCHEMA_PATH])
-    # will raise an exception if validation fails
-    c.validate()
+
+    try:
+        c.validate()
+        rprint(f'[bold green][+][/bold green] {file_path} is valid.')
+    except Exception as e:
+        rprint(f'[bold red][x][/bold red] {file_path} is invalid: {str(e)}')
 
 
-def validate_directory(directory_path, create=False):
+def validate_directory(directory_path, create=False, stats=False):
     # walk the directory and validate each file
     for root, dirs, files in os.walk(directory_path):
 
@@ -36,18 +70,31 @@ def validate_directory(directory_path, create=False):
             # only validate yaml files
             if file.endswith('.yaml') or file.endswith('.yml'):
                 file_path = os.path.join(root, file)
-
-                # validate the file
-                try:
-                    validate_file(file_path)
-                    print(f'[+] {file_path} is valid.')
-                except Exception as e:
-                    print(f'[x] validation failed for {file_path}\n{str(e)}')
-                    if create:
-                        new_uuid = str(uuid.uuid4())
-                        print(f'[+] new uuid: {new_uuid}')
+                validate_file(file_path, create)
                 
-                print('\n')
+                if stats:
+                    collect_stats_from_file(file_path)
+
+
+def display_stats():
+    # convert dictionary to dataframe
+    df = pd.DataFrame.from_dict({(i,j): statistics[i][j] 
+                            for i in statistics.keys() 
+                            for j in statistics[i].keys()},
+                            orient='index', columns=['Count'])
+
+    dfs = {field: pd.DataFrame(list(values.items()), columns=[field, 'Count']).sort_values('Count', ascending=False) 
+        for field, values in statistics.items()}
+
+    # Print our statistics in separate tables
+    for field, df in dfs.items():
+        rprint(f'[bold]{field}[/bold]')
+        if field == 'tags':
+            print('(top 5)')
+            print(df.head(5).to_string(index=False))  # Only display top 5 for tags
+        else:
+            print(df.to_string(index=False))
+        print('\n')
 
 
 if __name__ == '__main__':
@@ -79,19 +126,31 @@ if __name__ == '__main__':
         action='store_true'
     )
 
+    parser.add_argument(
+        '-g', '--gen-stats',
+        help='generate statistics from directory',
+        required=False,
+        default=False,
+        action='store_true'
+    )
+
     args = parser.parse_args()
 
     if not os.path.exists(args.schema):
-        print(f'[error] chema file {args.schema} does not exist.')
+        rprint(f'[bold red][x][/bold red] schema file {args.schema} does not exist.')
         sys.exit(1)
 
     SCHEMA_PATH = args.schema
     CREATE = args.create
+    STATS = args.gen_stats
 
     if args.file:
         validate_file(args.file)
     elif args.directory:
-        validate_directory(args.directory, CREATE)
+        validate_directory(args.directory, CREATE, STATS)
+        if STATS:
+            print('\n')
+            display_stats()
     else:
         parser.print_help()
         sys.exit(1)
