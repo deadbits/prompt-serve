@@ -4,7 +4,7 @@
 ## Overview 📖
 `prompt-serve` helps you manage all of your large language model (LLM) prompts and associated settings/metadata in a straightforward, version controlled manner. 
 
-This project provides a YAML schema for prompt indexing purposes and a small API server that handles interactions with a Git repository.
+This project provides a YAML schema for storing prompts in a structured manner and a small API server that handles interactions with a Git repository, so you can treat prompts more like re-usable code. 
 
 * [Release blog post](https://deadbits.substack.com/p/the-prompt-serve-schema)
 
@@ -14,6 +14,7 @@ This project provides a YAML schema for prompt indexing purposes and a small API
 * Create "packs" of multiple prompts or chains to represent categories of tasks or workflows
 * Store any kind of prompt text or template
 * Store LLM provider, model, and settings
+* Easily convert to [LangChain](https://github.com/hwcase17/langchain) [Prompt Templates](https://python.langchain.com/docs/modules/model_io/prompts/prompt_templates/)
 * Command-line utility for creating prompt files
 * Command-line utility for viewing prompt statistics
 * API server to upload or retrieve prompts*
@@ -38,6 +39,9 @@ model_settings:
   top_k: 40
   top_p: 0.9
 prompt: prompt-text
+input_variables:
+  - var1
+  - var2
 references:
   - https://example.com
   - https://example.com
@@ -53,11 +57,12 @@ tags:
 ```
 
 ## Validation
-You can use the [validate.py](validate.py) utility to verify prompts meet the schema and have unique UUIDs. By specifying the `--create` argument, a new UUID will be provided if a given prompt doesn't have a unique ID for your scanned set.
+You can use the [validate.py](validate.py) utility to verify prompts meet the schema and have unique UUIDs. 
+
+By specifying the `--create` argument, a new UUID will be provided if a given prompt doesn't have a unique ID for your scanned set.
 
 ```
-$ python validate.py --help                         [15:57:13]
-usage: validate.py [-h] [-s SCHEMA] [-f FILE] [-d DIRECTORY] [-c]
+usage: validate.py [-h] [-s SCHEMA] [-f FILE] [-d DIRECTORY] [-c] [-g]
 
 Validate YAML files against the prompt-serve schema.
 
@@ -69,51 +74,37 @@ options:
   -d DIRECTORY, --directory DIRECTORY
                         directory to validate
   -c, --create          create new uuids if validation fails
+  -g, --gen-stats       generate statistics from directory
+
 ```
+
+You can also gather statistics on the types of prompts in your collection by passing `--gen-stats`. The screenshot below is an example of this output.
+![Validation with stats](/assets/validate-with-stats.png)
 
 ## Statistics utility
 The command line utility [stats.py](stats.py) will scan a directory of prompt-serve files and display statistics on the category, provider, and model fields in tables. 
-
+Stats can also be optionally collected when running [validate.py](validate.py).
 
 **Example output** 
+![Stats](/assets/stats-cli.png)
+
+## Use in LangChain
+prompt-serve files can be easily converted to LangChain Prompt Templates.
+
 ```
-[ category ]
-      category  Count
-      instruct      6
-          base      3
-conversational      2
-       injects      2
-            qa      2
-      guidance      1
-         react      1
-           cot      1
-      security      1
+import yaml
+from langhain import PromptTemplate
 
-
-[ provider ]
-provider  Count
-  openai     15
-   local      4
-
-
-[ model ]
-        model  Count
-gpt-3.5-turbo     14
-       openai      1
-openassistant      1
- WizardVicuna      1
-       alpaca      1
-
-
-[ tags ]
-(top 5)
-              tags  Count
-            openai     14
-         local-llm      4
-              base      3
-          instruct      3
-question-answering      3
-
+def ps_to_langchain():
+    with open('prompt-serve.yml', 'r') as file:
+        try:
+            data = yaml.safe_load(file)
+            prompt = data.get('prompt')
+            input_vars = data.get('input_variables)'
+            langchain_template = PromptTemplate(template=prompt, input_variables=input_vars)
+            return langchain_template
+        except:
+            pass
 ```
 
 ## Prompt creation helper
@@ -122,7 +113,6 @@ The command line utility [create.py](create.py) can be used to interactively cre
 🪲 This is just a proof of concept and has a few known bugs:
 * multi-line input for "prompt" field not handled correctly
 * no defaults are set for optional fields
-   * we should not include the optional field if there's no input instead 
 
 ```
 $ python create.py -n summary.yml                   [20:27:04]
