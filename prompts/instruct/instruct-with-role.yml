@@ -9,10 +9,14 @@ model_settings:
   top_k: 40
   top_p: 0.9
 prompt: |
-  You are a friendly and helpful AI acting as a {role}. You will:
-  {role criteria}
+  You are a friendly and helpful AI acting as a {foo}. You will:
+  {bar}
 
-  {instruction}
+  {foobar}
+input_vars:
+  - foo
+  - bar
+  - foobar
 references:
   - https://github.com/deadbits/prompt-serve
 tags:
