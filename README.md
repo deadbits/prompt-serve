@@ -57,9 +57,9 @@ tags:
 ```
 
 ## Validation ✅
-You can use the [validate.py](validate.py) utility to verify prompts meet the schema and have unique UUIDs. 
+You can use the [validate.py](tools/validate.py) utility to verify prompts meet the schema and have unique UUIDs. 
 
-By specifying the `--create` argument, a new UUID will be provided if a given prompt doesn't have a unique ID for your scanned set.
+By specifying the `--create` argument, a new UUID will be provided if a given prompt isn't unique for your scanned set. You can also gather statistics on the types of prompts in your collection by passing `--gen-stats` (see the next section for example stats output).
 
 ```
 usage: validate.py [-h] [-s SCHEMA] [-f FILE] [-d DIRECTORY] [-c] [-g]
@@ -78,41 +78,48 @@ options:
 
 ```
 
-You can also gather statistics on the types of prompts in your collection by passing `--gen-stats`.
-
 **Example output**
+  
+![Validation output example](/assets/validate.png)
 
-![Validation with stats](/assets/validate-with-stats.png)
 
 ## Statistics utility 📊
-The command line utility [stats.py](stats.py) will scan a directory of prompt-serve files and display statistics on the category, provider, and model fields in tables. 
-Stats can also be optionally collected when running [validate.py](validate.py).
+The command line utility [stats.py](tools/stats.py) will scan a directory of prompt-serve files and display statistics on the category, provider, and model fields in tables. 
+Stats can also be optionally collected when running [validate.py](tools/validate.py).
 
 **Example output**
 
 ![Stats](/assets/stats-cli.png)
 
 ## Use in LangChain ⛓️
-prompt-serve files can be easily converted to LangChain Prompt Templates.
+prompt-serve files can be easily converted to LangChain Prompt Templates. 
+
+The [convert-to-langchain.py](tools/convert-to-langchain.py) utility is provided to convert individual prompt-serve files to langchain. A simplified example of how to do this in Python is shown below.
 
 ```python
 import yaml
 from langhain import PromptTemplate
 
-def ps_to_langchain():
-    with open('your-prompt-serve-file.yml', 'r') as file:
-        try:
-            data = yaml.safe_load(file)
-            prompt = data.get('prompt')
-            input_vars = data.get('input_variables)'
+def convert(path_to_ps_prompt):    
+    with open(path_to_ps_prompt, 'r') as fp:
+        data = yaml.safe_load(fp)
+        prompt = data['prompt']
+            
+        if 'input_vars' in data.keys():
+            input_vars = data['input_vars']
             langchain_template = PromptTemplate(template=prompt, input_variables=input_vars)
-            return langchain_template
-        except:
-            pass
+        else:
+            langchain_template = PromptTemplate(template=prompt)
+  
+        return langchain_template
 ```
 
-## Prompt creation helper ✍️
-The command line utility [create.py](create.py) can be used to interactively create a prompt with the prompt-serve schema. 
+**Example output**
+
+![langchain conversion](assets/convert-to-langchain.png)
+
+## Prompt creation utility ✍️
+The command line utility [create.py](tools/create.py) can be used to interactively create a prompt with the prompt-serve schema. 
 
 🪲 This is just a proof of concept and has a few known bugs:
 * multi-line input for "prompt" field not handled correctly
