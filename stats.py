@@ -4,17 +4,21 @@
 # collect statistics from prompt-serve yaml files
 
 import os
+import sys
 import yaml
 import pandas as pd
 import argparse
+
+from rich import print as rprint
+
 from collections import defaultdict
 
 
 statistics = defaultdict(lambda: defaultdict(int))
 
 
-def process_file(filename):
-    with open(filename, 'r') as file:
+def collect_stats_from_file(file_path):
+    with open(file_path, 'r') as file:
         try:
             data = yaml.safe_load(file)
 
@@ -28,15 +32,15 @@ def process_file(filename):
             for tag in data.get('tags', []):
                 statistics['tags'][tag] += 1
 
-        except yaml.YAMLError as exc:
-            print(f"Error in {filename}: {exc}")
+        except yaml.YAMLError as err:
+            rprint(f'[bold red][x][/bold red] error getting stats from {file_path}: {err}')
 
 
 def process_directory(dir_path):
     for root, _, files in os.walk(dir_path):
         for file in files:
             if file.endswith('.yaml') or file.endswith('.yml'):
-                process_file(os.path.join(root, file))
+                collect_stats_from_file(os.path.join(root, file))
 
 
 if __name__ == '__main__':
@@ -51,7 +55,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     if not os.path.isdir(args.directory):
-        print(f'(error) {args.directory} is not a valid directory')
+        rprint(f'[bold red][x][/bold red] {args.directory} is not a valid directory')
         sys.exit(1)
     
     process_directory(args.directory)
@@ -67,7 +71,7 @@ if __name__ == '__main__':
 
     # Print our statistics in separate tables
     for field, df in dfs.items():
-        print(f'[ {field} ]')
+        rprint(f'[bold]{field}[/bold]')
         if field == 'tags':
             print('(top 5)')
             print(df.head(5).to_string(index=False))  # Only display top 5 for tags
