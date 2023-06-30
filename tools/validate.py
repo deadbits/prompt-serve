@@ -13,6 +13,8 @@ from pykwalify.core import Core
 # store uuids in a set to check for uniqueness
 seen_uuids = set()
 statistics = defaultdict(lambda: defaultdict(int))
+passed = 0
+failed = 0
 
 
 def collect_stats_from_file(file_path):
@@ -35,6 +37,7 @@ def collect_stats_from_file(file_path):
 
 
 def validate_file(file_path, create=False):
+    global passed, failed
     # load the yaml file
     with open(file_path, 'r') as f:
         data = yaml.safe_load(f)
@@ -58,8 +61,10 @@ def validate_file(file_path, create=False):
     try:
         c.validate()
         rprint(f'[bold green][+][/bold green] {file_path} is valid.')
+        passed += 1
     except Exception as e:
         rprint(f'[bold red][x][/bold red] {file_path} is invalid: {str(e)}')
+        failed += 1
 
 
 def validate_directory(directory_path, create=False, stats=False):
@@ -91,14 +96,14 @@ def display_stats():
         rprint(f'[bold]{field}[/bold]')
         if field == 'tags':
             print('(top 5)')
-            print(df.head(5).to_string(index=False))  # Only display top 5 for tags
+            print(df.head(5).to_string(index=False))
         else:
             print(df.to_string(index=False))
         print('\n')
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Validate YAML files against the prompt-serve schema.')
+    parser = argparse.ArgumentParser(description='Validate YAML prompts against the prompt-serve schema.')
     
     parser.add_argument(
         '-s', '--schema',
@@ -109,13 +114,13 @@ if __name__ == '__main__':
 
     parser.add_argument(
         '-f', '--file', 
-        help='single file to validate', 
+        help='single prompt to validate', 
         required=False
     )
 
     parser.add_argument(
         '-d', '--directory',
-        help='directory to validate',
+        help='directory of prompts to validate',
         required=False
     )
 
@@ -151,6 +156,8 @@ if __name__ == '__main__':
         if STATS:
             print('\n')
             display_stats()
+        rprint(f'\n[bold]Passed:[/bold] {passed} prompts')
+        rprint(f'[bold red]Failed:[/bold red] {failed} prompts')
     else:
         parser.print_help()
         sys.exit(1)
