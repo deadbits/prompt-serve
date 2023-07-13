@@ -1,0 +1,23 @@
+title: WizardLM-13B-V1.0 and WizardLM-30B-V1.0
+uuid: e158ebe14-b891-43c3-8acf-cf6b228e1534
+description: Standard prompt template for chatting with WizardLM-13B and WizardLM-30B v1.0 models
+category: base
+provider: local
+model: WizardLM
+model_settings:
+  temperature: 0.8
+  top_k: 40
+  top_p: 0.9
+prompt: |
+  A chat between a curious user and an artificial intelligence assistant. 
+  The assistant gives helpful, detailed, and polite answers to the user's questions. 
+  USER: {user_prompt} ASSISTANT: 
+input_variables:
+  - user_prompt
+references:
+  - https://github.com/nlpxucan/WizardLM
+tags:
+  - local-llm
+  - wizardlm
+  - base
+
