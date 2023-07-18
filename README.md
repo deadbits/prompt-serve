@@ -20,8 +20,8 @@ This project provides a YAML schema for storing prompts in a structured manner a
   * viewing repo statistics
   * convert prompts to [LangChain](https://github.com/hwcase17/langchain) [Prompt Templates](https://python.langchain.com/docs/modules/model_io/prompts/prompt_templates/)
 * Command-line utility for validating single prompt or directory against schema
-* Version controlled via Git (work in progress)
-* API server to upload or retrieve prompts (work in progress)
+* Version controlled via Git
+* API server to upload or retrieve prompts (proof of concept / work in progress)
 
 ## Schema 🗺️
 Prompts follow the schema provided in [schema.yml](schema.yml). 
