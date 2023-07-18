@@ -1,5 +1,5 @@
 title: WizardLM-13B-V1.0 and WizardLM-30B-V1.0
-uuid: e158ebe14-b891-43c3-8acf-cf6b228e1534
+uuid: 4e9ef621-ffc9-4e0f-991f-586816bca5b7
 description: Standard prompt template for chatting with WizardLM-13B and WizardLM-30B v1.0 models
 category: base
 provider: local
