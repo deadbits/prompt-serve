@@ -96,7 +96,7 @@ Stats can also be optionally collected when running [validate.py](/tools/validat
 ## Use in LangChain ⛓️
 prompt-serve files can be easily converted to LangChain Prompt Templates. 
 
-The [content control tool](/tools/contentctl.py) utility can convert individual prompt-serve files to langchain format. 
+The [content control tool](/tools/contentctl.py) can convert individual prompt-serve files to langchain format. 
 
 **Example output**
 
@@ -123,7 +123,7 @@ def convert(path_to_ps_prompt):
 ```
 
 ## Prompt creation utility ✍️
-The [content control tool](/tools/contentctl.py) utility can be used to interactively create a prompt with the prompt-serve schema. 
+The [content control tool](/tools/contentctl.py) can be used to interactively create a prompt with the prompt-serve schema. 
 
 🪲 This is just a proof of concept and has a few known bugs. You would be better served creating these on your own for now.
 * multi-line input for "prompt" field not handled correctly
