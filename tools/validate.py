@@ -1,3 +1,7 @@
+#!/usr/bin/env python
+# validate.py
+# github.com/deadbits/prompt-serve
+# validate prompt-serve yaml files against the schema
 import os
 import sys
 import uuid
