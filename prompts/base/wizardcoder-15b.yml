@@ -1,0 +1,26 @@
+title: WizardLM-7B-V1.0
+uuid: e158ebe14-b891-43c3-8acf-cf6b228e1534
+description: Standard prompt template for WizardLM-7B-V1.0 model
+category: base
+provider: local
+model: WizardLM
+model_settings:
+  temperature: 0.8
+  top_k: 40
+  top_p: 0.9
+prompt: |
+  Below is an instruction that describes a task. Write a response that appropriately completes the request.
+  
+  ### Instruction:
+  {instruction}
+  
+  ### Response:
+input_variables:
+  - instruction
+references:
+  - https://github.com/nlpxucan/WizardLM
+tags:
+  - local-llm
+  - wizardlm
+  - wizardlm-15b
+  - base

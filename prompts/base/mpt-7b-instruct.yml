@@ -1,0 +1,23 @@
+title: MPT-7B Instruct base prompt
+uuid: e158ebe14-b891-43c3-8acf-cf6b228e1534
+description: Standard prompt template for MPT-7B Instruct model
+category: base
+provider: local
+model: MPT-7B
+model_settings:
+  temperature: 0.8
+  top_k: 40
+  top_p: 0.9
+prompt: |
+  Below is an instruction that describes a task. Write a response that appropriately completes the request.
+  ### Instruction:
+  {instruction}
+  ### Response:
+input_variables:
+  - instruction
+references:
+  - https://huggingface.co/mosaicml/mpt-7b
+tags:
+  - local-llm
+  - wizardlm
+  - base
