@@ -14,13 +14,14 @@ This project provides a YAML schema for storing prompts in a structured manner a
 * Create "packs" of multiple prompts or chains to represent categories of tasks or workflows
 * Store any kind of prompt text or template
 * Store LLM provider, model, and settings
-* Easily convert to [LangChain](https://github.com/hwcase17/langchain) [Prompt Templates](https://python.langchain.com/docs/modules/model_io/prompts/prompt_templates/)
-* Command-line utility for creating prompt files
-* Command-line utility for viewing prompt statistics
-* API server to upload or retrieve prompts*
-* Version controlled via Git*
-
-`* = _coming soon_`
+* [Command-line utility](tools/contentctl.py) for common tasks
+  * initializing new Git repository
+  * creating prompt files
+  * viewing repo statistics
+  * convert prompts to [LangChain](https://github.com/hwcase17/langchain) [Prompt Templates](https://python.langchain.com/docs/modules/model_io/prompts/prompt_templates/)
+* Command-line utility for validating single prompt or directory against schema
+* Version controlled via Git (work in progress)
+* API server to upload or retrieve prompts (work in progress)
 
 ## Schema 🗺️
 Prompts follow the schema provided in [schema.yml](schema.yml). 
@@ -57,7 +58,7 @@ tags:
 ```
 
 ## Validation ✅
-You can use the [validate.py](tools/validate.py) utility to verify prompts meet the schema and have unique UUIDs. 
+You can use the [validate.py](/tools/validate.py) utility to verify prompts meet the schema and have unique UUIDs. 
 
 By specifying the `--create` argument, a new UUID will be provided if a given prompt isn't unique for your scanned set. You can also gather statistics on the types of prompts in your collection by passing `--gen-stats` (see the next section for example stats output).
 
@@ -84,17 +85,24 @@ options:
 
 
 ## Statistics utility 📊
-The command line utility [stats.py](tools/stats.py) will scan a directory of prompt-serve files and display statistics on the category, provider, and model fields in tables. 
-Stats can also be optionally collected when running [validate.py](tools/validate.py).
+The [content control tool](/tools/contentctl.py) can be used to scan a directory of prompt-serve repository and display statistics about all the prompts in the collection, including information on the category, provider, model, and tags.
+
+Stats can also be optionally collected when running [validate.py](/tools/validate.py).
 
 **Example output**
 
-![Stats](/assets/stats-cli.png)
+![Stats](/assets/stats.png.png)
 
 ## Use in LangChain ⛓️
 prompt-serve files can be easily converted to LangChain Prompt Templates. 
 
-The [convert-to-langchain.py](tools/convert-to-langchain.py) utility is provided to convert individual prompt-serve files to langchain. A simplified example of how to do this in Python is shown below.
+The [content control tool](/tools/contentctl.py) utility can convert individual prompt-serve files to langchain format. 
+
+**Example output**
+
+![langchain conversion](/assets/convert.png)
+
+**Python**
 
 ```python
 import yaml
@@ -109,19 +117,15 @@ def convert(path_to_ps_prompt):
             input_vars = data['input_vars']
             langchain_template = PromptTemplate(template=prompt, input_variables=input_vars)
         else:
-            langchain_template = PromptTemplate(template=prompt)
+            langchain_template = PromptTemplate(template=prompt, input_variables=[])
   
         return langchain_template
 ```
 
-**Example output**
-
-![langchain conversion](assets/convert-to-langchain.png)
-
 ## Prompt creation utility ✍️
-The command line utility [create.py](tools/create.py) can be used to interactively create a prompt with the prompt-serve schema. 
+The [content control tool](/tools/contentctl.py) utility can be used to interactively create a prompt with the prompt-serve schema. 
 
-🪲 This is just a proof of concept and has a few known bugs:
+🪲 This is just a proof of concept and has a few known bugs. You would be better served creating these on your own for now.
 * multi-line input for "prompt" field not handled correctly
 * no defaults are set for optional fields
 
