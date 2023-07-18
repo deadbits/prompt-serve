@@ -91,7 +91,7 @@ Stats can also be optionally collected when running [validate.py](/tools/validat
 
 **Example output**
 
-![Stats](/assets/stats.png.png)
+![Stats](/assets/stats.png)
 
 ## Use in LangChain ⛓️
 prompt-serve files can be easily converted to LangChain Prompt Templates. 
