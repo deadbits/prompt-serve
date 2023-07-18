@@ -37,7 +37,7 @@ def collect_stats_from_file(file_path):
                 statistics['tags'][tag] += 1
 
         except yaml.YAMLError as err:
-            rprint(f'[bold red][x][/bold red] error getting stats from {file_path}: {err}')
+            rprint(f'[bold red](error)[/bold red] error getting stats from {file_path}: {err}')
 
 
 def validate_file(file_path, create=False):
@@ -50,12 +50,12 @@ def validate_file(file_path, create=False):
     uuid = data.get('uuid')
 
     if uuid in seen_uuids:
-        rprint(f'[red][x][/bold red] UUID {uuid} in file {file_path} is not unique.')
+        rprint(f'[bold red](error)[/bold red] UUID {uuid} in file {file_path} is not unique.')
 
         # create a new uuid if requested
         if create:
             new_uuid = str(uuid.uuid4())
-            rprint(f'[bold blue][+][/bold blue] new uuid: {new_uuid}')
+            rprint(f'[bold blue](status)[/bold blue] new uuid: {new_uuid}')
     
     seen_uuids.add(uuid)
 
@@ -64,10 +64,10 @@ def validate_file(file_path, create=False):
 
     try:
         c.validate()
-        rprint(f'[bold green][+][/bold green] {file_path} is valid.')
+        rprint(f'[bold green](status)[/bold green] {file_path} is valid.')
         passed += 1
     except Exception as e:
-        rprint(f'[bold red][x][/bold red] {file_path} is invalid: {str(e)}')
+        rprint(f'[bold red](error)[/bold red] {file_path} is invalid: {str(e)}')
         failed += 1
 
 
@@ -146,7 +146,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     if not os.path.exists(args.schema):
-        rprint(f'[bold red][x][/bold red] schema file {args.schema} does not exist.')
+        rprint(f'[bold red](error)[/bold red] schema file {args.schema} does not exist.')
         sys.exit(1)
 
     SCHEMA_PATH = args.schema
