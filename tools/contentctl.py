@@ -5,6 +5,7 @@ import sys
 import uuid
 import argparse
 import configparser
+import json
 import yaml
 import pandas as pd
 
@@ -13,6 +14,7 @@ from rich.prompt import Prompt
 from git import Repo
 from collections import defaultdict 
 from pykwalify.core import Core
+from langchain import PromptTemplate
 
 
 statistics = defaultdict(lambda: defaultdict(int))
@@ -49,15 +51,40 @@ def init_repo(config):
     full_path = os.path.join(repo_path, repo_name)
 
     if os.path.exists(os.path.join(full_path, '.git')):
-        rprint(f'[bold red][x][/bold red] repository already exists: {full_path}')
+        rprint(f'[bold red](error)[/bold red] repository already exists: {full_path}')
         sys.exit(1)
     
     try:
         repo = Repo.init(full_path)
-        rprint(f'[bold green][+][/bold green] repository initialized: {repo.common_dir}')
+        rprint(f'[bold green](status)[/bold green] repository initialized: {repo.common_dir}')
     except Exception as err:
-        rprint(f'[bold red][x][/bold red] failed to initialize repository: {err}')
+        rprint(f'[bold red](error)[/bold red] failed to initialize repository: {err}')
         sys.exit(1)
+
+
+def convert_to_langchain(fpath):
+    rprint(f'[bold green](status)[/bold green] converting template {fpath}')
+    
+    with open(fpath, 'r') as fp:
+        try:
+            data = yaml.safe_load(fp)
+            prompt = data['prompt']
+            
+            # check if prompt-serve template contains input variables
+            if 'input_variables' in data.keys():
+                input_vars = data['input_variables']
+                langchain_template = PromptTemplate(template=prompt, input_variables=input_vars)
+            
+            # otherwise we only use the prompt
+            else:
+                langchain_template = PromptTemplate(template=prompt, input_variables=[])
+     
+            return (data, langchain_template)
+     
+        except Exception as err:
+            print
+            rprint(f'[bold red](error)[/bold red] failed to convert prompt: {fpath} - {err}')
+            return (None, None)
 
 
 def ask_for_input(field_name, field_type, is_required, default_value=None):
@@ -117,9 +144,9 @@ def save_prompt(prompt, filename):
     try:
         with open(filename, 'w') as f:
             yaml.dump(prompt, f, sort_keys=False)
-        rprint(f'[bold green][+][/bold green] prompt saved to {filename}')
+        rprint(f'[bold green](status)[/bold green] prompt saved to {filename}')
     except Exception as e:
-        rprint(f'[bold red][x][/bold red] failed to save prompt: {e}')
+        rprint(f'[bold red](error)[/bold red] failed to save prompt: {e}')
 
 
 def collect_stats_from_file(file_path):
@@ -138,7 +165,7 @@ def collect_stats_from_file(file_path):
                 statistics['tags'][tag] += 1
 
         except yaml.YAMLError as err:
-            rprint(f'[bold red][x][/bold red] error getting stats from {file_path}: {err}')
+            rprint(f'[bold red](error)[/bold red] error getting stats from {file_path}: {err}')
 
 
 def collect_stats_from_dir(dir_path):
@@ -196,11 +223,17 @@ if __name__ == '__main__':
         help='show statistics for directory of prompts'
     )
 
+    parser.add_argument(
+        '-l', '--langchain',
+        action='store',
+        help='convert prompt-serve template to langchain PromptTemplate'
+    )
+
     args = parser.parse_args()
 
     if args.init:
         if not args.config:
-            rprint(f'[bold red][x][/bold red] config file required for initialization')
+            rprint(f'[bold red](error)[/bold red] config file required for initialization')
             sys.exit(1)
 
         config = Config(args.config)
@@ -208,7 +241,7 @@ if __name__ == '__main__':
 
     if args.new:
         if os.path.exists(args.new):
-            rprint(f'[bold red][x][/bold red] file already exists: {args.new}')
+            rprint(f'[bold red](error)[/bold red] file already exists: {args.new}')
             sys.exit(1)
 
         prompt = create_prompt()
@@ -216,8 +249,22 @@ if __name__ == '__main__':
 
     if args.stats:
         if not os.path.isdir(args.stats):
-            rprint(f'[bold red][x][/bold red] {args.stats} is not a valid directory')
+            rprint(f'[bold red](error)[/bold red] {args.stats} is not a valid directory')
             sys.exit(1)
 
         collect_stats_from_dir(args.stats)
         display_stats()
+    
+    if args.langchain:
+        if not os.path.exists(args.langchain):
+            rprint(f'[bold red](error)[/bold red] template does not exist: {args.langchain}')
+            sys.exit(1)
+
+        original, langchain_template = convert_to_langchain(args.langchain)
+        if original is None or langchain_template is None:
+            rprint(f'[bold red](error)[/bold red] failed to convert prompt: {args.langchain}')
+            sys.exit(1)
+        
+        rprint(f'[bold green](status)[/bold green] successfully converted template: {args.langchain}')
+        rprint(f'[bold orange3]LangChain PromptTemplate[/bold orange3]')
+        print(json.dumps(langchain_template.dict(), indent=2))
