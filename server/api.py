@@ -1,93 +1,123 @@
-
 import os
 import sys
-import uuid
 import yaml
-
-from flask import Flask, request, jsonify, send_file
-
-from uuid import uuid4
-
-from pykwalify.core import Core as ymlvalidator
-
-from werkzeug.utils import secure_filename
-
-from lib import gitmgr
-from lib.utils import msg
-from lib.utils import Config
+import aiofiles
+import configparser
+from fastapi import FastAPI, UploadFile, File, HTTPException, Depends, Query
+from git import Repo
+from uuid import UUID
+from typing import Optional
+from starlette.responses import FileResponse
+from fastapi.params import Path
 
 
-app = Flask(__name__)
+app = FastAPI()
+
+
+class Config:
+    def __init__(self, config_file):
+        # check if config file exists
+        self.config_file = config_file
+        if not os.path.exists(self.config_file):
+            print(f'config file not found: {self.config_file}', 'error')
+            sys.exit(1)
+
+        # load config file
+        print(f'loading config file: {self.config_file}', 'status')
+        self.config = configparser.ConfigParser()
+        self.config.read(self.config_file)
+
+    def get(self, section, key):
+        # get config option by section and key name
+        answer = None
+
+        try:
+            answer = self.config.get(section, key)
+        except:
+            print(f'config file missing option: {section} {key}', 'error')
+
+        return answer
+
+
 config = Config('ps.conf')
+global REPO_HOME
+REPO_HOME = config.get('main', 'repo_path')
 
 
-@app.route('/upload', methods=['POST'])
-def upload():
-    msg('uploading new prompt', 'status')
+def verify_dir_is_repo(repo_path: str) -> bool:
+    try:
+        repo = Repo(repo_path)
+        return True
+    except:
+        return False
 
-    if 'file' not in request.files:
-        msg('no file part', 'error')
-        return jsonify(error='no file'), 400
-    
-    file = request.files['file']
 
-    if file.filename == '':
-        msg('no selected file', 'error')
-        return jsonify(error='no filename'), 400
-    
-    if file:        
-        fuuid = str(uuid.uuid4())
-        filename = f'{fuuid}.yaml'
+def parse_yaml(file_path: str) -> dict:
+    with open(file_path, 'r') as f:
+        data = yaml.safe_load(f)
+    return data
 
-        try:
-            msg(f'trying to load yaml: {filename}')
-            data = yaml.safe_load(file)
-        except yaml.YAMLError as exc:
-            return jsonify(error=str(exc)), 400
+
+@app.post('/{repo_name}')
+async def upload_file(repo_name: str, file: UploadFile = File(...)):
+    try:
+        repo_path = os.path.join(REPO_HOME, repo_name)
+        if not verify_dir_is_repo(repo_path):
+            raise HTTPException(status_code=400, detail=f'directory is not a git repository: {repo_path}')
+
+        file_path = os.path.join(repo_path, file.filename)
         
-        # validate against the schema
-        msg('validating yaml against schema')
-        c = ymlvalidator(source_data=data, schema_files=['../schema.yml'])
-        c.validate()
+        async with aiofiles.open(file_path, 'wb') as f:
+            content = await file.read()
+            await f.write(content)
 
-        file_path = os.path.join(full_path, f'{fuuid}.yaml')
-        msg(f'writing new prompt to file: {file_path}')
-        with open(file_path, 'w') as file:
-            yaml.dump(data, file)
+        repo = Repo(repo_path)
+        repo.git.add([file_path])
+        repo.index.commit('Add file through API')
+        msg = {'filename': file.filename, 'message': 'file uploaded and committed successfully'}
+        
+        return msg
+    
+    except Exception as err:
+        raise HTTPException(status_code=400, detail=str(err))
 
-        repo.add_file(file_path)
 
-        return jsonify(message='prompt successfully uploaded and committed'), 200
+@app.get('/{repo_name}/_name/{prompt_name}', responses={200: {'content': {'application/x-yaml': {}}}})
+async def read_file_by_name(repo_name: str, prompt_name: str, raw: Optional[bool] = Query(None)):
+    repo_path = os.path.join(REPO_HOME, repo_name)
+    if not verify_dir_is_repo(repo_path):
+        raise HTTPException(status_code=400, detail=f'directory is not a git repository: {repo_path}')
 
-
-@app.route('/retrieve/<uuid>', methods=['GET'])
-def retrieve(uuid):
-    # Assuming files are saved with their uuid as the filename
-    filename = secure_filename(uuid + '.yaml')
-    file_path = os.path.join(full_path, filename)
-    msg(f'retrieving file: {file_path}')
-
+    file_path = os.path.join(repo_path, f'{prompt_name}.yml')
+    
     if os.path.exists(file_path):
-        try:
-            msg(f'returning file: {file_path}')
-            return send_file(file_path, mimetype='application/x-yaml')
-        except Exception as err:
-            msg(f'error returning file: {err}', 'error')
-            return jsonify(error=str(err)), 500
+        data = parse_yaml(file_path)
+        
+        if raw:
+            return {'prompt': data.get('prompt')}
+        else:
+            return FileResponse(file_path, media_type='application/x-yaml')
+    
     else:
-        msg(f'file not found: {file_path}', 'error')
-        return jsonify(error='File not found'), 404
+        raise HTTPException(status_code=404, detail=f'File not found: {file_path}')
 
 
+@app.get('/{repo_name}/_uuid/{prompt_uuid}', responses={200: {'content': {'application/x-yaml': {}}}})
+async def read_file_by_uuid(repo_name: str, prompt_uuid: UUID, raw: Optional[bool] = Query(None)):
+    repo_path = os.path.join(REPO_HOME, repo_name)
+    if not verify_dir_is_repo(repo_path):
+        raise HTTPException(status_code=400, detail=f'directory is not a git repository: {repo_path}')
 
-if __name__ == '__main__':
-    global repo
-    global full_path
-
-    repo_path = config.get('main', 'repo_path')
-    repo_name = config.get('main', 'repo_name')
-    full_path = os.path.join(repo_path, repo_name)
-
-    repo = gitmgr.Mgr(repo_path, repo_name)
-
-    app.run(debug=True)
+    for root, _, files in os.walk(repo_path):
+        for file in files:
+            if file.endswith('.yml'):
+                file_location = os.path.join(root, file)
+                data = parse_yaml(file_location)
+                
+                if data.get('uuid') == str(prompt_uuid):
+                    if raw:
+                        return {'prompt': data.get('prompt')}
+                    else:
+                        return FileResponse(file_location, media_type='application/x-yaml')
+    
+    raise HTTPException(status_code=404, detail=f'File not found for UUID: {prompt_uuid}')
