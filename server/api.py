@@ -39,7 +39,7 @@ class Config:
         return answer
 
 
-config = Config('ps.conf')
+config = Config('../ps.conf')
 global REPO_HOME
 REPO_HOME = config.get('main', 'repo_path')
 
