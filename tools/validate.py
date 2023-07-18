@@ -47,17 +47,17 @@ def validate_file(file_path, create=False):
         data = yaml.safe_load(f)
 
     # check for uniqueness of uuid
-    uuid = data.get('uuid')
+    f_uuid = data.get('uuid')
 
-    if uuid in seen_uuids:
-        rprint(f'[bold red](error)[/bold red] UUID {uuid} in file {file_path} is not unique.')
+    if f_uuid in seen_uuids:
+        rprint(f'[bold red](error)[/bold red] UUID {f_uuid} in file {file_path} is not unique.')
 
         # create a new uuid if requested
         if create:
             new_uuid = str(uuid.uuid4())
-            rprint(f'[bold blue](status)[/bold blue] new uuid: {new_uuid}')
+            rprint(f'[bold blue](new uuid)[/bold blue] {new_uuid}')
     
-    seen_uuids.add(uuid)
+    seen_uuids.add(f_uuid)
 
     # validate against the schema
     c = Core(source_data=data, schema_files=[SCHEMA_PATH])
