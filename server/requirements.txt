@@ -1,0 +1,6 @@
+aiofiles==23.1.0
+fastapi==0.100.0
+GitPython==3.1.31
+pykwalify==1.8.0
+PyYAML==6.0
+starlette==0.27.0
